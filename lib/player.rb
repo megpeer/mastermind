@@ -1,5 +1,5 @@
 
-class PlayerGame
+class Player
   attr_reader :code
   attr_accessor :correct, :contains, :turn_count, :user_guess
 
