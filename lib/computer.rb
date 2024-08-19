@@ -3,10 +3,10 @@ class Computer
 
   def initialize
     puts 'the computer has 9 rounds to guess the 4-digit code.'
-    puts 'the code must be 4 digits, numbers 1-6.'
-    puts 'the computer will use super AI to guess your code. You must let it know a) how many numbers are correct, and b) how many of those numbers are in the correct position.'
     puts ''
-    puts 'enter a 4 digit code:'
+    puts 'You must let the computer know what correct number they guessed.'
+    puts ''
+    puts 'enter a 4 digit code (numbers 1-6):'
     @code = []
     @correct_code = [0, 0, 0, 0]
     @computer_guess = []
@@ -25,6 +25,10 @@ class Computer
   def computer_init
     if @turn_count == 10
       lose
+    elsif @turn_count >= 1
+      @computer_guess = Array.new(4) { Random.rand(1...6) }
+      puts "computer guessed #{@computer_guess}"
+      corrected_guess
     else
       @computer_guess = Array.new(4) { Random.rand(1...6) }
       puts "computer guessed #{@computer_guess}"
@@ -39,34 +43,25 @@ class Computer
       puts 'list which integer position ([0, 1, 2, 3]) the computer got right'
       @correct = gets.chomp.each_char.to_a
       @correct.map!(&:to_i)
-      puts "#{@correct}"
+      puts "integer #{@correct} is correct!"
       @turn_count += 1
       codecrunch
     end
   end
 
-  # def check_win
-  # if @code == @correct_code
-  #   win
-  # # elsif
-  #   #absolutely no numbers are correct
-  #   # computer_init
-  # else
-  #   codecrunch
-  #  end
-  # end
-
   def codecrunch
-    for x in @correct do
-      @correct_code[x] = @computer_guess[x]
-    end
-    puts "#{@correct_code}"
-    computer_guess
+      @correct.each  { |x| @correct_code[x] = @computer_guess[x] }
+  
+    puts "correct code so far is #{@correct_code}"
+    
+    computer_init
   end
 
-  def computer_guess
-    puts 'computer guess now'
-    win
+  def corrected_guess
+      @correct.each { |x| @computer_guess[x] = @correct_code[x] }
+
+    puts "corrected computer guess is #{@computer_guess}"
+    codemaster_input
   end
 
   def win
