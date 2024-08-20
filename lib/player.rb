@@ -29,10 +29,10 @@ class Player
       if @user_guess.length == 4 && @user_guess =~ /[0-6]{4}/
       @user_guess = @user_guess.split('').map(&:to_i)
       match_check
-     
+
       else
       error
-  
+
     end
   end
 

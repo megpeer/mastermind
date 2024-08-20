@@ -1,4 +1,3 @@
-
 class Lobby
   def initialize
     puts 'Welcome to Mastermind!'
@@ -22,5 +21,4 @@ class Lobby
   def computer_game
     Computer.new
   end
-
 end

@@ -9,6 +9,8 @@ class Computer
     puts 'enter a 4 digit code (numbers 1-6):'
     @code = []
     @correct_code = [0, 0, 0, 0]
+    @allowed_code = [1, 2, 3, 4, 5, 6]
+    @allowed_ints = [0, 1, 2, 3]
     @computer_guess = []
     @correct = 0
     @turn_count = 0
@@ -19,7 +21,30 @@ class Computer
     @code = gets.chomp.each_char.to_a
     @code.map!(&:to_i)
     puts "the code you have chosen is #{@code}"
-    computer_init
+    code_check
+  end
+
+  def code_check
+    if @code.length == 4 && @code.all? { |i| @allowed_code.include?(i) }
+
+      
+      computer_init
+
+    else
+      error
+    end
+  end
+
+  def codemaster_input
+    if @code == @correct_code
+      win
+    else
+
+      puts 'list which integer position ([0, 1, 2, 3]) the computer got right? (hit enter if none)'
+      @correct = gets.chomp.each_char.to_a
+      @correct.map!(&:to_i)
+      codemaster_check
+    end
   end
 
   def computer_init
@@ -36,30 +61,39 @@ class Computer
     end
   end
 
-  def codemaster_input
-    if @code == @correct_code
-      win
+  def error
+    puts 'Invalid input. please enter 4 numbers between 1 and 6'
+    if @turn_count < 1
+      code_input
     else
-      puts 'list which integer position ([0, 1, 2, 3]) the computer got right'
-      @correct = gets.chomp.each_char.to_a
-      @correct.map!(&:to_i)
-      puts "integer #{@correct} is correct!"
-      @turn_count += 1
-      codecrunch
+      codemaster_input
     end
   end
-
-  def codecrunch
-      @correct.each  { |x| @correct_code[x] = @computer_guess[x] }
   
+
+    def codemaster_check
+      if @correct == @allowed_ints
+        win
+        
+      elsif @correct.length <= 4 && @correct.all? { |i| @allowed_ints.include?(i) }
+        puts "integer #{@correct} is correct!"
+        @turn_count += 1
+        codecrunch
+
+      else
+        error
+
+      end
+    end
+
+    def codecrunch
+      @correct.each { |x| @correct_code[x] = @computer_guess[x] }
     puts "correct code so far is #{@correct_code}"
-    
     computer_init
-  end
+    end
 
   def corrected_guess
       @correct.each { |x| @computer_guess[x] = @correct_code[x] }
-
     puts "corrected computer guess is #{@computer_guess}"
     codemaster_input
   end
